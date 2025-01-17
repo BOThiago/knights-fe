@@ -24,29 +24,29 @@
             <div class="atributes">
               <div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.strength" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.strength" />
                   <label class="form__label">Strength:</label>
                 </div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.dexterity" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.dexterity" />
                   <label class="form__label">Dexterity:</label>
                 </div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.constitution" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.constitution" />
                   <label class="form__label">Constitution:</label>
                 </div>
               </div>
               <div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.intelligence" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.intelligence" />
                   <label class="form__label">Intelligence:</label>
                 </div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.wisdom" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.wisdom" />
                   <label class="form__label">Wisdom:</label>
                 </div>
                 <div class="form__group field">
-                  <input class="form__field" type="number" v-model.number="form.attributes.charisma" :min="0" :max="20" />
+                  <input class="form__field" type="number" v-model.number="form.attributes.charisma" />
                   <label class="form__label">Charisma:</label>
                 </div>
               </div>
@@ -174,14 +174,21 @@ function onEquippedChange(index: number) {
 }
 
 async function onSubmit() {
-try {
-    await knightsStore.createKnight(form as any);
-    alert('Knight created successfully!');
-    router.push('/');
-} catch (error) {
-    console.error('Error creating knight:', error);
-    alert('Error creating knight.');
-}
+    for (const [key, value] of Object.entries(form.attributes)) {
+        if (value < 0 || value > 20) {
+            alert(`${key.charAt(0).toUpperCase() + key.slice(1)} must be between 0 and 20`);
+            return;
+        }
+    }
+    
+    try {
+        await knightsStore.createKnight(form as any);
+        alert('Knight created successfully!');
+        router.push('/');
+    } catch (error) {
+        console.error('Error creating knight:', error);
+        alert(error.message);
+    }
 }
 </script>
   
